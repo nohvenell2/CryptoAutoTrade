@@ -8,9 +8,13 @@ from calc_targetprice import calc_targetprice_latest
 from check_price import check_price
 from check_asset import check_asset
 from order_buy import order_buy_wait
+import time
+from optimize_k import optimize_k
 
 def vb_buy(asset,market,k,max_price=10000,debug=False):
     # 자산이 보유중이면 이미 매수 포지션이기 때문에 매수를 실행하지 않음
+    current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    if debug: print(f"{current_time} 자산: {asset} 매수 조건 확인")
     if check_asset(asset) > 0:
         if debug: print(f"{asset} 자산을 보유하고있어 매수를 실행하지 않습니다.")
         return 
@@ -50,4 +54,10 @@ def vb_bid(market,max_price=10000,debug=False):
     return order_result
 
 if __name__ == "__main__":
-    vb_buy('XRP','KRW-XRP', k=0.15, debug=True)
+    ASSET = 'XRP'
+    MARKET = 'KRW-XRP'
+    """
+    k = optimize_k(market=MARKET,k_range = [ i/10 for i in range(1,20)],debug=True)
+    vb_buy(ASSET,MARKET, k=k, debug=True)
+    """
+    vb_buy('XRP','KRW-XRP',k=0.4,debug=True)

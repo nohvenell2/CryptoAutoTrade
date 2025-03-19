@@ -6,6 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from check_asset import check_asset
 from order_sell import order_sell_wait
+import time
 
 def vb_sell(market, asset_name, debug=False):
     """
@@ -21,7 +22,8 @@ def vb_sell(market, asset_name, debug=False):
     Returns:
         _type_: _description_
     """
-    if debug: print("VB 전략 매도 실행")
+    current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    if debug: print(f"{current_time} VB 전략 매도 실행")    
     asset_balance = check_asset(asset_name)
     if asset_balance <= 0:
         # debugPrint

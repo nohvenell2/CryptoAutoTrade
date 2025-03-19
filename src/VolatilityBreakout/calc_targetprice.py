@@ -24,4 +24,4 @@ def calc_targetprice_latest(k,debug=False):
     return target_price
 
 if __name__ == "__main__":
-    print(calc_targetprice_latest(0.5,debug=True))
+    calc_targetprice_latest(0.15,debug=True)

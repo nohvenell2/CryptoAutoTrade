@@ -44,7 +44,7 @@ def fetch_ohlc(market = DEFAULT_MARKET, count = 1, time = None, unit = DEFAULT_U
     result = []
     for p in fetch_result:
         result.append({
-            'timestamp': p['timestamp'],
+            'time': p['candle_date_time_kst'],
             'open': p['opening_price'],
             'high': p['high_price'],
             'low': p['low_price'],
@@ -53,4 +53,4 @@ def fetch_ohlc(market = DEFAULT_MARKET, count = 1, time = None, unit = DEFAULT_U
     return result
 
 if __name__ == "__main__":
-    print(fetch_ohlc(count=2,debug=True))
+    print(fetch_ohlc(count=5,unit=60,debug=True))
