@@ -4,6 +4,7 @@ import time
 # 상위 디렉토리 경로를 sys.path에 추가
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from show_order import show_order_simple
 from check_asset import check_asset
 from order_sell import order_sell_wait
 import time
@@ -28,9 +29,19 @@ def vb_sell(market, asset_name, debug=False):
     if asset_balance <= 0:
         # debugPrint
         if debug: print(f"{asset_name} 자산을 보유하고있지 않아 매도를 실행하지 않습니다.")
-        return
+        return None
     order_result = order_sell_wait(market,asset_balance,debug)
     return order_result
 
 if __name__ == "__main__":
-    vb_sell('KRW-XRP','XRP',debug=True)
+    ASSET = 'XRP'
+    MARKET = 'KRW-XRP'
+    # 매도 실행
+    result = vb_sell(MARKET,ASSET,debug=False)
+    current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    if result:
+        print(f"### 💵 {current_time} - 매도 실행")
+        print(f"{show_order_simple(result)}")
+    else:
+        # todo 매도 실행 조건 불만족
+        pass

@@ -8,6 +8,25 @@ def format_datetime(datetime_str):
     korea_time = dt.astimezone(korea_tz)
     return korea_time.strftime('%Y-%m-%d %H:%M:%S')
 
+def show_order_simple(order_result):
+    """주문 결과를 한 줄로 간단히 출력하는 함수"""
+    if not order_result or 'uuid' not in order_result:
+        print("유효하지 않은 주문 결과입니다.")
+        return
+
+    order_type = "매수" if order_result['side'] == 'bid' else "매도"
+    status = {'wait': '대기', 'done': '완료', 'cancel': '취소'}.get(order_result['state'], '알 수 없음')
+    
+    if order_result['trades'] and len(order_result['trades']) > 0:
+        total_volume = sum(float(trade['volume']) for trade in order_result['trades'])
+        total_funds = sum(float(trade['funds']) for trade in order_result['trades'])
+        avg_price = total_funds / total_volume if total_volume > 0 else 0
+        
+        print(f"[{format_datetime(order_result['created_at'])}] {order_type} {status}: {order_result['market']} | " 
+              f"수량: {total_volume:.8f} | 평균가: {avg_price:,.2f}원 | 총액: {total_funds:,.2f}원")
+    else:
+        print(f"[{format_datetime(order_result['created_at'])}] {order_type} {status}: {order_result['market']} | 미체결")
+
 def show_order(order_result):
     """주문 결과를 깔끔하게 출력하는 함수"""
     if not order_result or 'uuid' not in order_result:
@@ -75,9 +94,10 @@ def show_order(order_result):
     
     print("="*50 + "\n")
 
-def example_single_trade():
-    """단일 거래 예제"""
-    single_trade_example = {
+def example_usage():
+    """함수 사용 예제"""
+    # 단일 거래 예제 데이터
+    single_trade = {
         'uuid': 'ddedecb4-f477-40f2-ab49-5bbec4d9ed8c',
         'side': 'bid',
         'ord_type': 'price',
@@ -102,12 +122,9 @@ def example_single_trade():
             'side': 'bid'
         }]
     }
-    print("\n[단일 거래 예제]")
-    show_order(single_trade_example)
-
-def example_multiple_trades():
-    """다중 거래 예제"""
-    multiple_trades_example = {
+    
+    # 다중 거래 예제 데이터
+    multiple_trades = {
         'uuid': 'ddedecb4-f477-40f2-ab49-5bbec4d9ed8c',
         'side': 'bid',
         'ord_type': 'price',
@@ -144,9 +161,14 @@ def example_multiple_trades():
             }
         ]
     }
-    print("\n[다중 거래 예제]")
-    show_order(multiple_trades_example)
+
+    print("\n[간단한 출력 예제]")
+    show_order_simple(single_trade)
+    show_order_simple(multiple_trades)
+    
+"""     print("\n[상세 출력 예제]")
+    show_order(single_trade)
+    show_order(multiple_trades) """
 
 if __name__ == "__main__":
-    example_single_trade()
-    #example_multiple_trades()
+    example_usage()

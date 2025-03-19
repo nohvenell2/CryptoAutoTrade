@@ -66,7 +66,7 @@ def order_sell_wait(market,volume,debug=False):
         else:
             if debug: print(f"매도 주문이 처리되었습니다.")
             break
-        # todo 주문이 완료 되었음에도 cancel 로 나오는 경우가 있음. 추후 수정 필요
+        # todo 주문이 완료 되었음에도 cancel 로 나오는 경우가 있음. 추후 확인 필요
         """ elif order_result['state'] == 'cancel': 
             if debug: print(f"매도 주문이 취소되었습니다.")
             raise Exception("매도 주문이 취소되었습니다.") """

@@ -7,7 +7,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from fetch_ohlc import fetch_ohlc
 from calc_targetprice import calc_targetprice
 
-def optimize_k(market,k_range=[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0],time_unit=240,debug=False):
+def optimize_k(market,k_range=[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0],time_unit=240,count=200,debug=False):
     """
     변동성 돌파 전략의 k 값을 최적화하는 함수
 
@@ -20,7 +20,7 @@ def optimize_k(market,k_range=[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0],time_uni
     Returns:
         float: 최적 k 값
     """
-    ohlc_data = fetch_ohlc(market,unit=time_unit,count=200)[1:]
+    ohlc_data = fetch_ohlc(market,unit=time_unit,count=count)[1:]
     best_k, best_return = 0, 0
     if debug: print(f"최적 K 값 찾기 시작")
     for k in k_range:
@@ -54,7 +54,6 @@ def calc_k(ohlc_data,k_value,debug=False):
         # 타겟 가격보다 가격이 더 올라간 적이 있었으면 타겟 가격에 구매한 것으로 간주
         if current_data['high'] >= target_price :
             # 타겟 가격에 구매하고 청산 시점에 판매
-            # debug
             profit_ratio = (current_data['close'] - target_price) / target_price
             return_rate *= (1 + profit_ratio)
             trade_count += 1
@@ -62,4 +61,4 @@ def calc_k(ohlc_data,k_value,debug=False):
     if debug: print(f"VB 수익률 계산 : K = {k_value} / 수익률 : {return_rate} / 매매 횟수 : {trade_count}")
     return {"return_rate":round(return_rate,6),"trade_count":trade_count}
 if __name__ == "__main__":
-    optimize_k(market="KRW-XRP",k_range = [ i/10 for i in range(40,51)],debug=True)
+    optimize_k(market="KRW-XRP",count=100,k_range = [ i/10 for i in range(0,51)],debug=True)
